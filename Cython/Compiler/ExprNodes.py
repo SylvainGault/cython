@@ -6872,7 +6872,8 @@ class AttributeNode(ExprNode):
         return self.type
 
     def analyse_target_declaration(self, env):
-        pass
+        if isinstance(self.obj, (NameNode, AttributeNode)):
+            self.obj.analyse_target_declaration(env)
 
     def analyse_target_types(self, env):
         node = self.analyse_types(env, target = 1)

@@ -816,3 +816,22 @@ def test_inner_private():
     assert inner_are_the_same == False,  "Temporary variables in inner loop should be private"
 
     print('ok')
+
+cdef struct stid:
+    int tid
+
+def test_private_struct():
+    """
+    >>> test_private_struct()
+    """
+    cdef int tid
+    cdef stid s
+
+    with nogil, cython.parallel.parallel(num_threads=2):
+        tid = cython.parallel.threadid()
+        s.tid = cython.parallel.threadid()
+
+        with gil:
+            import time
+            time.sleep(0.1)
+            assert tid == s.tid
